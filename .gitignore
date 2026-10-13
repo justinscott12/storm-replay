@@ -1,0 +1,8 @@
+node_modules/
+dist/
+output/
+__pycache__/
+*.pyc
+test/fixtures/*
+!test/fixtures/.gitkeep
+.vite/

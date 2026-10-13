@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Replay real NEXRAD Doppler radar scans in your browser." />
+    <meta name="color-scheme" content="dark" />
+    <title>Storm Replay</title>
+  </head>
+  <body>
+    <div id="map" role="application" aria-label="Radar map"></div>
+    <header class="panel" id="panel">
+      <h1>Storm Replay</h1>
+      <p class="subtitle">Moore, Oklahoma · May 20, 2013</p>
+      <p id="status" role="status">Loading radar scan…</p>
+      <p id="meta" aria-live="polite"></p>
+      <div id="legend"></div>
+      <p id="stats" class="stats"></p>
+    </header>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

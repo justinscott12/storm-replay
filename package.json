@@ -1,0 +1,27 @@
+{
+  "name": "storm-replay",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Replay real NEXRAD Doppler radar scans in the browser. Static site, no backend.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "fixtures": "node scripts/fetch-fixtures.mjs"
+  },
+  "dependencies": {
+    "maplibre-gl": "^6.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "typescript": "5.9",
+    "vite": "^6.4.4",
+    "vitest": "^3.2.7"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "license": "MIT"
+}
