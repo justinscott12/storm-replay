@@ -29,6 +29,8 @@ export interface Sweep {
   /** physical value = (code - offset) / scale. Codes 0 (below threshold) and 1 (range folded) are flags. */
   scale: number;
   offset: number;
+  /** Nyquist (maximum unambiguous) velocity of the cut, m/s. Velocities beyond it alias. */
+  nyquistMs: number;
   /** Azimuth of each radial, degrees clockwise from north, in collection order. */
   azimuths: Float32Array;
   /** radials x gates codes, row-major by radial. */
@@ -81,15 +83,17 @@ class SweepBuilder {
   gateSpacingM = 0;
   scale = 1;
   offset = 0;
+  nyquistMs = 0;
 
   constructor(
     readonly moment: MomentName,
     readonly elevationNumber: number,
   ) {}
 
-  add(bytes: Uint8Array, m: MomentRef, azimuth: number, elevation: number): void {
+  add(bytes: Uint8Array, m: MomentRef, azimuth: number, elevation: number, nyquistMs: number): void {
     if (m.wordSize !== 8) throw new DecodeError(`${this.moment}: unexpected ${m.wordSize}-bit gates`);
     if (this.rows.length === 0) {
+      this.nyquistMs = nyquistMs;
       this.gates = m.gates;
       this.firstGateM = m.firstGateM;
       this.gateSpacingM = m.gateSpacingM;
@@ -117,6 +121,7 @@ class SweepBuilder {
       gateSpacingM: this.gateSpacingM,
       scale: this.scale,
       offset: this.offset,
+      nyquistMs: this.nyquistMs,
       azimuths: Float32Array.from(this.azimuths),
       data,
     };
@@ -211,6 +216,7 @@ export class MessageCollector {
     const azimuth = dv.getFloat32(o + 12);
     const elevation = dv.getFloat32(o + 24);
     const blocks = dv.getUint16(o + 30);
+    let nyquistMs = 0;
     for (let i = 0; i < blocks && i < 10; i++) {
       const b = o + dv.getUint32(o + 32 + 4 * i);
       if (b + 28 > bytes.length) continue;
@@ -220,6 +226,8 @@ export class MessageCollector {
         this.lon = dv.getFloat32(b + 12);
         this.siteHeightM = dv.getInt16(b + 16);
         this.vcp = dv.getUint16(b + 40);
+      } else if (name === 'RAD') {
+        nyquistMs = dv.getUint16(b + 16) / 100;
       } else if (name === 'REF' || name === 'VEL') {
         const m: MomentRef = {
           offset: b + 28,
@@ -232,10 +240,10 @@ export class MessageCollector {
         };
         if (name === 'REF') {
           this.ref ??= new SweepBuilder('REF', elevNum);
-          if (this.ref.elevationNumber === elevNum) this.ref.add(bytes, m, azimuth, elevation);
+          if (this.ref.elevationNumber === elevNum) this.ref.add(bytes, m, azimuth, elevation, nyquistMs);
         } else {
           this.vel ??= new SweepBuilder('VEL', elevNum);
-          if (this.vel.elevationNumber === elevNum) this.vel.add(bytes, m, azimuth, elevation);
+          if (this.vel.elevationNumber === elevNum) this.vel.add(bytes, m, azimuth, elevation, nyquistMs);
         }
       }
     }

@@ -14,7 +14,22 @@ export interface FrameMoment {
   scale: number;
   offset: number;
   elevationDeg: number;
+  /** Nyquist velocity, m/s (meaningful for VEL). */
+  nyquistMs: number;
   grid: Uint8Array;
+}
+
+/** A cyclonic velocity couplet found by src/analysis/rotation.ts. */
+export interface Rotation {
+  lat: number;
+  lon: number;
+  rangeKm: number;
+  azimuthDeg: number;
+  /** Rotational velocity, half the inbound-to-outbound difference, m/s. */
+  vrotMs: number;
+  /** Distance between the inbound and outbound maxima, km. */
+  diameterKm: number;
+  strength: 'moderate' | 'strong';
 }
 
 export interface Frame {
@@ -26,9 +41,11 @@ export interface Frame {
   vcp: number;
   ref: FrameMoment;
   vel: FrameMoment | null;
+  rotations: Rotation[];
 }
 
 export interface FetchStats {
+  kind: 'archive' | 'packed';
   /** Compressed bytes received before the download was cancelled. */
   bytesDownloaded: number;
   /** Full object size from Content-Length, when known. */
@@ -37,9 +54,12 @@ export interface FetchStats {
   totalMs: number;
   /** CPU time in bzip2 + message parsing (gunzip runs in native DecompressionStream). */
   decodeMs: number;
+  /** CPU time in rotation detection. */
+  rotationMs?: number;
 }
 
-export type WorkerRequest = { id: number; url: string };
+/** `archive`: a raw Archive II volume from the bucket. `packed`: a preprocessed .srf frame. */
+export type WorkerRequest = { id: number; kind: 'archive' | 'packed'; url: string };
 
 export type WorkerResponse =
   | { id: number; ok: true; frame: Frame; stats: FetchStats }

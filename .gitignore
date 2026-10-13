@@ -6,3 +6,4 @@ __pycache__/
 test/fixtures/*
 !test/fixtures/.gitkeep
 .vite/
+.cache/

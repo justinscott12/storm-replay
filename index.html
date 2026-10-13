@@ -3,20 +3,73 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Replay real NEXRAD Doppler radar scans in your browser." />
+    <meta name="description" content="Replay real NEXRAD Doppler radar of historic tornadoes in your browser: Moore, Joplin, and more." />
     <meta name="color-scheme" content="dark" />
     <title>Storm Replay</title>
   </head>
   <body>
     <div id="map" role="application" aria-label="Radar map"></div>
-    <header class="panel" id="panel">
-      <h1>Storm Replay</h1>
-      <p class="subtitle">Moore, Oklahoma · May 20, 2013</p>
-      <p id="status" role="status">Loading radar scan…</p>
-      <p id="meta" aria-live="polite"></p>
+
+    <section class="panel" id="panel" aria-label="Storm details">
+      <header class="panel-head">
+        <h1>Storm Replay</h1>
+        <button id="about-btn" class="link-btn" type="button" aria-haspopup="dialog">About</button>
+      </header>
+      <nav class="storms" id="storms" aria-label="Featured storms"></nav>
+      <h2 id="storm-title"></h2>
+      <p id="storm-subtitle" class="muted"></p>
+      <p id="caption" class="caption" aria-live="polite"></p>
+
+      <div class="row">
+        <div class="seg" role="radiogroup" aria-label="Radar product">
+          <button type="button" role="radio" data-product="REF" aria-checked="true" title="Reflectivity (R)">Reflectivity</button>
+          <button type="button" role="radio" data-product="VEL" aria-checked="false" title="Velocity (V)">Velocity</button>
+        </div>
+      </div>
+      <div class="toggles" aria-label="Overlays">
+        <label><input type="checkbox" id="t-warnings" checked /> Warnings</label>
+        <label><input type="checkbox" id="t-tracks" checked /> Damage path</label>
+        <label><input type="checkbox" id="t-rotation" checked /> Rotation</label>
+      </div>
       <div id="legend"></div>
+      <p id="meta" class="muted small"></p>
+      <p id="rotation-info" class="small"></p>
+      <p id="status" class="small" role="status"></p>
       <p id="stats" class="stats"></p>
-    </header>
+    </section>
+
+    <section class="bar" aria-label="Playback">
+      <button id="play" type="button" class="icon-btn" aria-label="Play">▶</button>
+      <div class="timeline">
+        <input id="scrub" type="range" min="0" max="0" value="0" step="1" aria-label="Scan time" />
+        <div id="buffer" class="buffer" aria-hidden="true"></div>
+      </div>
+      <div class="time" id="time" aria-live="off"><span id="time-utc"></span><span id="time-local" class="muted"></span></div>
+      <label class="speed"><span class="sr-only">Speed</span>
+        <select id="speed" aria-label="Playback speed">
+          <option value="2">0.5×</option>
+          <option value="4" selected>1×</option>
+          <option value="8">2×</option>
+        </select>
+      </label>
+      <button id="share" type="button" class="icon-btn" aria-label="Copy link to this scan" title="Copy link to this scan">🔗</button>
+    </section>
+
+    <dialog id="about">
+      <h2>About Storm Replay</h2>
+      <p>Real NEXRAD Level II Doppler radar, decoded in your browser. Featured storms load small preprocessed frames; links to any other station and time stream the raw volumes from NOAA's archive and decode them in a Web Worker. Rendering is WebGL on a MapLibre map. There's no backend.</p>
+      <p><strong>Keys:</strong> Space play/pause · ←/→ step · R/V reflectivity/velocity · Home/End first/last scan.</p>
+      <p><strong>Rotation markers</strong> come from an automatic velocity-couplet detector (lowest tilt, rotational velocity ≥ 20 m/s, about 39 kt). They're a demo, not a warning product.</p>
+      <h3>Data and credits</h3>
+      <ul>
+        <li>Radar: NOAA NEXRAD Level II, via the <code>unidata-nexrad-level2</code> AWS Open Data bucket.</li>
+        <li>Tornado warnings: National Weather Service, via the <a href="https://mesonet.agron.iastate.edu/" target="_blank" rel="noopener">Iowa Environmental Mesonet</a>.</li>
+        <li>Damage paths: NWS Damage Assessment Toolkit and the SPC tornado database.</li>
+        <li>Basemap: <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © OpenMapTiles, data from OpenStreetMap contributors.</li>
+      </ul>
+      <form method="dialog"><button class="btn" type="submit">Close</button></form>
+    </dialog>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

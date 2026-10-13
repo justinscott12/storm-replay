@@ -9,7 +9,10 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "fixtures": "node scripts/fetch-fixtures.mjs"
+    "fixtures": "node scripts/fetch-fixtures.mjs",
+    "build:storms": "vite-node scripts/build-storms.ts",
+    "build:overlays": "vite-node scripts/build-overlays.ts",
+    "survey": "vite-node scripts/survey.ts"
   },
   "dependencies": {
     "maplibre-gl": "^6.14.0"

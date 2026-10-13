@@ -64,6 +64,7 @@ export async function fetchScan(url: string, signal?: AbortSignal): Promise<{ sc
   return {
     scan: archive.finish(),
     stats: {
+      kind: 'archive',
       bytesDownloaded,
       fileBytes: Number.isFinite(length) && length > 0 ? length : null,
       ttfbMs,

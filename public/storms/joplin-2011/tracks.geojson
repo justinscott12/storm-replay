@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-94.5932,37.0524],[-94.2213,36.9838]]},"properties":{"name":"Joplin tornado","ef":"EF5","start":1306103640000,"end":1306105920000,"lengthMi":21.62,"widthYd":1600,"fatalities":158,"source":"SPC tornado database (straight start-to-end segment)"}}]}
