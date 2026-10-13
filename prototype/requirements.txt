@@ -1,0 +1,4 @@
+arm-pyart>=1.18
+matplotlib>=3.8
+numpy>=1.26
+cartopy>=0.22
