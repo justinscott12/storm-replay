@@ -44,17 +44,33 @@ const SOURCES: Record<string, TrackSource> = {
       fatalities: 158,
     },
   },
-  'pittsburgh-2026': { wfo: 'PBZ', dat: { date: '2026-06-06' } },
-};
-
-// DAT entries without an event name, labelled from the matching NWS local storm reports.
-const UNNAMED: Record<string, string> = {
-  '1780771080000': 'Beallsville Tornado',
-  '1780771440000': 'Centerville Tornado',
+  'tuscaloosa-2011': {
+    wfo: 'BMX',
+    dat: { date: '2011-04-27', where: "event_id = 'Tuscaloosa-Birmingham Tornado'" },
+  },
+  // El Reno isn't in the DAT; SPC times are 17:03-17:43 CST.
+  'el-reno-2013': {
+    wfo: 'OUN',
+    spc: {
+      name: 'El Reno tornado',
+      ef: 'EF3',
+      start: [-98.096, 35.485],
+      end: [-97.848, 35.502],
+      startTime: '2013-05-31T23:03:00Z',
+      endTime: '2013-05-31T23:43:00Z',
+      lengthMi: 16.2,
+      widthYd: 4576,
+      fatalities: 8,
+    },
+  },
+  // The quad-state supercell's long-track tornado; the DAT stores it under three offices, unnamed.
+  'mayfield-2021': { wfo: 'PAH', dat: { date: '2021-12-11', where: 'length > 160' } },
 };
 
 const TRACK_FACTS: Record<string, Record<string, unknown>> = {
   'moore-2013': { name: 'Moore tornado', ef: 'EF5', lengthMi: 13.85, widthYd: 1900, fatalities: 24 },
+  'tuscaloosa-2011': { name: 'Tuscaloosa–Birmingham tornado', fatalities: 64 },
+  'mayfield-2021': { name: 'Western Kentucky tornado', fatalities: 57 },
 };
 
 async function json<T>(url: string): Promise<T> {
@@ -107,7 +123,7 @@ async function tracks(id: string, src: TrackSource, windowStart: number, windowE
   }
   const d = src.dat!;
   const next = new Date(Date.parse(d.date) + 86_400_000).toISOString().slice(0, 10);
-  const where = `wfo='${src.wfo}' AND stormdate >= DATE '${d.date}' AND stormdate < DATE '${next}'${d.where ? ` AND ${d.where}` : ''}`;
+  const where = `wfo LIKE '%${src.wfo}%' AND stormdate >= DATE '${d.date}' AND stormdate < DATE '${next}'${d.where ? ` AND ${d.where}` : ''}`;
   const params = new URLSearchParams({ where, outFields: 'event_id,starttime,endtime,efscale,length,width,fatalities', f: 'geojson' });
   const data = await json<{ features: Feature[] }>(`${DAT}?${params}`);
   return data.features
@@ -118,7 +134,7 @@ async function tracks(id: string, src: TrackSource, windowStart: number, windowE
         type: 'Feature',
         geometry: f.geometry,
         properties: {
-          name: (p.event_id as string) || UNNAMED[String(p.starttime)] || 'Tornado',
+          name: (p.event_id as string) || 'Tornado',
           ef: p.efscale,
           start: d.times ? Date.parse(d.times.start) : (p.starttime as number),
           end: d.times ? Date.parse(d.times.end) : (p.endtime as number),

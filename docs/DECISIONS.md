@@ -101,7 +101,7 @@ Rejected: delta-coding rows or gates before gzip (±5%, not worth the complexity
 `DecompressionStream` can't decode it in all browsers), and range-requesting raw volumes for the
 featured storms (still ~5× more bytes).
 
-## 2026-10-13 · Pittsburgh window is 18:15–19:20 UTC, not ~03:05
+## 2026-10-13 · Pittsburgh window is 18:15–19:20 UTC, not ~03:05 (superseded: Pittsburgh dropped, see below)
 
 The brief said the KPBZ storm was "from ~03:05 UTC". The 03:05 scan is clear air (VCP 35, max 28 dBZ).
 The NWS storm survey (DAT + local storm reports) puts six EF1 tornadoes in Washington, Fayette and
@@ -160,3 +160,18 @@ scope).
 `defineConfig(({ command }))` reports `serve` for `vite preview`, so the preview served the build at `/`
 while the HTML asked for `/storm-replay/assets/…` (404). The base now applies to `build` and `isPreview`.
 The `storm-replay-build` launch entry previews the real sub-path.
+
+## 2026-10-14 · Featured storms: five famous tornadoes, Pittsburgh dropped
+
+Justin's call: the featured list should be tornadoes people recognize. Pittsburgh's six brief EF1s
+(and the rotation detector's blind spot for them) didn't earn a slot. The five are Moore 2013 (EF5,
+KTLX), Joplin 2011 (EF5, KSGF), Tuscaloosa–Birmingham 2011 (EF4, KBMX, the April 27 Super Outbreak),
+El Reno 2013 (EF3, the widest tornado on record, KTLX), and Mayfield / Western Kentucky 2021 (EF4,
+KPAH). All are in the Message 31 era, so the decoder handles every one of them. Captions use NWS/SPC
+survey facts (times, path length, width, deaths). Damage paths: DAT centerlines for Moore, Tuscaloosa
+and Mayfield; SPC straight segments for Joplin and El Reno (not in the DAT).
+
+The detector finds the main couplet on all five (e.g. El Reno 23:23 UTC at 111 kt, Mayfield over the
+town at 03:23). On Tuscaloosa it also marks other supercells; on April 27, 2011 many of those really
+were rotating. Assets total ~28 MB in `public/storms/` (Mayfield's widespread winter rain makes its
+frames the largest, at ~485 KB).

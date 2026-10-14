@@ -7,7 +7,7 @@ straight from NOAA's archive and decode them in a Web Worker. Rendering is WebGL
 
 > Work in progress. See [PROGRESS.md](PROGRESS.md) for status and [docs/DECISIONS.md](docs/DECISIONS.md) for design notes.
 
-- **Featured storms:** Moore 2013, Joplin 2011 and Pittsburgh 2026, with captions, NWS tornado warning
+- **Featured storms:** Moore 2013, Joplin 2011, Tuscaloosa 2011, El Reno 2013 and Mayfield 2021, with captions, NWS tornado warning
   polygons, and the surveyed damage path drawn in as the storm moves.
 - **Reflectivity and velocity**, with play, scrub and speed controls, and keyboard shortcuts (space, ←/→, R/V).
 - **Rotation markers** from an in-browser velocity-couplet detector, which finds the Moore tornado

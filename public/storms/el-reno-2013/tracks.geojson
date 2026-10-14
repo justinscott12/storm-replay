@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-98.096,35.485],[-97.848,35.502]]},"properties":{"name":"El Reno tornado","ef":"EF3","start":1370041380000,"end":1370043780000,"lengthMi":16.2,"widthYd":4576,"fatalities":8,"source":"SPC tornado database (straight start-to-end segment)"}}]}

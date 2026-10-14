@@ -41,9 +41,9 @@ Data scripts (outputs are committed, so you only rerun these to change storms):
   frames. Play/pause, scrub, step, speed (0.5×/1×/2×), and a buffer bar under the timeline. The loop
   waits for the next frame instead of skipping it.
 - **Velocity:** a REF/VEL toggle (button or R/V) using an NWS-style green/red palette, with range folding in purple.
-- **Featured storms:** Moore 2013 (17 scans), Joplin 2011 (16) and Pittsburgh 2026 (11) as one-click
-  storyboards, with captions keyed to time and preprocessed `.srf` frames of ~220–290 KB each (vs
-  1.5–2.5 MB on the raw path). The first frame loaded in 181 ms in the worker (fetch + unpack +
+- **Featured storms:** Moore 2013 (17 scans), Joplin 2011 (16), Tuscaloosa 2011 (19), El Reno 2013 (16)
+  and Mayfield 2021 (13) as one-click storyboards (Pittsburgh was dropped on 2026-10-14), with captions
+  keyed to time and preprocessed `.srf` frames of ~220–485 KB each (vs 1.5–2.5 MB on the raw path). The first frame loaded in 181 ms in the worker (fetch + unpack +
   rotation, local server).
 - **Links:** `#KTLX/2013-05-20T19:55Z/vel`. A featured window opens the storm; anything else streams
   ±45 min of raw volumes from the bucket (tested: `#KTLX/2013-05-31T23:10Z/vel`, El Reno day). The URL
@@ -68,11 +68,11 @@ Message 1 (the decoder already throws `UnsupportedFormatError`), and network fai
 - **First-frame time can't be measured in the hidden Claude preview pane.** The map doesn't paint until
   the pane is shown, so it reads 13–18 s. Worker-side timings are real (181 ms for a packed frame).
   Measure time to first frame in a visible browser for the README (M5).
-- Rotation misses weak, line-embedded spin-ups (Pittsburgh's EF1s, Vrot < 20 m/s) and has occasional
-  false alarms near the radar and at 100+ km. It's documented in the about panel as a demo, not a
+- Rotation misses weak, line-embedded spin-ups (Vrot < 20 m/s) and has occasional false alarms near the
+  radar and at 100+ km. It's documented in the about panel as a demo, not a
   warning product.
-- Joplin's damage path is SPC's straight start→end segment (pre-DAT), so the couplet runs ~4 km
-  north of it mid-path.
+- Joplin's and El Reno's damage paths are SPC's straight start→end segments (not in the DAT), so the
+  couplet can sit a few km off them mid-path.
 - Warning polygons are shown as issued (issuance → expiry); follow-up statements that shrink them
   aren't modelled.
 - In stream mode, local time is the viewer's zone (stations have no time zone table until M4).
